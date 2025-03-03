@@ -25,11 +25,14 @@ export function LinkGrid({ links }: LinkGridProps) {
             {categoryLinks
               .sort((a, b) => a.position - b.position)
               .map((link) => (
-                <LinkCard key={link.id} link={link} />
+                <LinkCard
+                  key={link.id}
+                  link={link}
+                />
               ))}
           </div>
         </div>
       ))}
     </div>
   );
-} 
+}

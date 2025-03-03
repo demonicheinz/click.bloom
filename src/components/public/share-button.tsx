@@ -62,7 +62,7 @@ export function ShareButton() {
     setPageUrl(window.location.href);
   }, []);
 
-  const handleShare = async (option: typeof shareOptions[0]) => {
+  const handleShare = async (option: (typeof shareOptions)[0]) => {
     if (option.action) {
       const success = await option.action(pageUrl);
       if (success) {
@@ -89,7 +89,10 @@ export function ShareButton() {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={setIsOpen}
+    >
       <DialogTrigger asChild>
         <Button
           variant="ghost"
@@ -121,7 +124,9 @@ export function ShareButton() {
               className="opacity-60"
             />
             <div className="flex-1">
-              <span className={`text-sm transition-all duration-200 ${isCopied ? "text-green-600 font-medium" : ""}`}>
+              <span
+                className={`text-sm transition-all duration-200 ${isCopied ? "text-green-600 font-medium" : ""}`}
+              >
                 {isCopied ? "Copied!" : pageUrl}
               </span>
             </div>
@@ -182,4 +187,4 @@ export function ShareButton() {
       </DialogContent>
     </Dialog>
   );
-} 
+}

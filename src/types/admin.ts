@@ -6,4 +6,4 @@ export type Admin = {
   bio?: string;
   created_at: string;
   updated_at: string;
-}; 
+};

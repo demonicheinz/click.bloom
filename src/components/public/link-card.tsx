@@ -28,15 +28,11 @@ export function LinkCard({ link }: LinkCardProps) {
           )}
           <div className="flex-grow">
             <h2 className="font-medium text-gray-900">{link.title}</h2>
-            {link.description && (
-              <p className="mt-1 text-sm text-gray-500">{link.description}</p>
-            )}
+            {link.description && <p className="mt-1 text-sm text-gray-500">{link.description}</p>}
           </div>
-          <div className="flex-shrink-0 text-sm text-gray-400">
-            {link.click_count} clicks
-          </div>
+          <div className="flex-shrink-0 text-sm text-gray-400">{link.click_count} clicks</div>
         </a>
       </CardContent>
     </Card>
   );
-} 
+}

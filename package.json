@@ -2,11 +2,23 @@
   "name": "click.bloom",
   "version": "0.1.0",
   "private": true,
+  "description": "Aplikasi Link in Bio.",
+  "author": "demonicheinz",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/demonicheinz/click.boom.git"
+  },
+  "homepage": "https://clickbloom.vercel.app",
+  "bugs": {
+    "url": "https://github.com/demonicheinz/click.boom/issues"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare": "husky"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.6",
@@ -23,11 +35,22 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["@biomejs/biome"]
+  },
+  "lint-staged": {
+    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+      "biome check --write --no-errors-on-unmatched"
+    ]
   }
 }
