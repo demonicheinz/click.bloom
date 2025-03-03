@@ -9,9 +9,9 @@
 ![React](https://img.shields.io/badge/React-black?logo=react&labelColor=black)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-black?logo=tailwindcss&labelColor=black)
 
-![GitHub License](https://img.shields.io/github/license/demonicheinz/click.boom?logo=creative-commons&logoColor=white&label=License)
-![GitHub last commit](https://img.shields.io/github/last-commit/demonicheinz/click.boom?logo=github&label=Last%20Commit)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/demonicheinz/click.boom/code-quality.yml?branch=main&logo=github&label=Build)
+![GitHub License](https://img.shields.io/github/license/demonicheinz/click.bloom?logo=creative-commons&logoColor=white&label=License)
+![GitHub last commit](https://img.shields.io/github/last-commit/demonicheinz/click.bloom?logo=github&label=Last%20Commit)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/demonicheinz/click.bloom/CodeQL.yml?branch=main&logo=github&label=Build)
 [![Live Preview](https://img.shields.io/badge/Live%20Preview-🔗-blue?logo=vercel&logoColor=white)](https://links.heinz.id/)
 
 </div>
