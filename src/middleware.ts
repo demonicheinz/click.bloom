@@ -1,33 +1,20 @@
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { updateSession } from "@/utils/supabase/middleware";
 
-// This function can be marked `async` if using `await` inside
-export function middleware(request: NextRequest) {
-  // For now, we'll just check if there's a user item in localStorage
-  // In a real app, we would verify the session token with the backend
-  const user = request.cookies.get("user");
-  const isLoggedIn = !!user;
-
-  // Get the pathname of the request
-  const { pathname } = request.nextUrl;
-
-  // If the user is not logged in and trying to access a protected route
-  if (!isLoggedIn && pathname.startsWith("/dashboard")) {
-    // Redirect to the login page
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-
-  // If the user is logged in and trying to access the login page
-  if (isLoggedIn && pathname === "/login") {
-    // Redirect to the dashboard
-    return NextResponse.redirect(new URL("/dashboard", request.url));
-  }
-
-  // Otherwise, continue with the request
-  return NextResponse.next();
+export async function middleware(request: NextRequest) {
+  return await updateSession(request);
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/dashboard/:path*", "/login"],
+  matcher: [
+    /*
+     * Match all request paths except:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - images - .svg, .png, .jpg, .jpeg, .gif, .webp
+     * Feel free to modify this pattern to include more paths.
+     */
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
 };

@@ -1,24 +1,27 @@
 "use client";
 
 import type * as React from "react";
-import { Settings2, SquareTerminal, BarChart, Link, FolderTree, Palette } from "lucide-react";
+import { Settings2, SquareTerminal, BarChart, Link, FolderTree, Palette, X } from "lucide-react";
 
-import { NavMain } from "@/components/nav-main";
-import { NavUser } from "@/components/nav-user";
-import { NavHeader } from "@/components/nav-header";
+import { NavMain } from "@/components/dashboard/nav-main";
+import { NavUser } from "@/components/dashboard/nav-user";
+import { NavHeader } from "@/components/dashboard/nav-header";
 import {
   Sidebar,
-  SidebarContent,
-  SidebarFooter,
   SidebarHeader,
+  SidebarFooter,
+  SidebarContent,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@/components/auth/auth-provider";
+import { useMobileSidebar } from "@/app/(dashboard)/layout";
 
 // This is sample data.
 const data = {
   user: {
     name: "Heinz",
-    email: "contact@heinz.id",
+    email: "admin@heinz.id",
     avatar: "/default-avatar.svg",
   },
   navHeader: [
@@ -69,6 +72,10 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { logout } = useAuth();
+  const { isMobile } = useSidebar();
+  const { setIsMobileSidebarOpen } = useMobileSidebar();
+
   return (
     <Sidebar
       collapsible="icon"
@@ -81,7 +88,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser
+          user={data.user}
+          onLogout={logout}
+        />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

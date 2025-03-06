@@ -1,8 +1,10 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import Cookies from "js-cookie";
+import { createContext, useContext, useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import type { AuthError } from "@supabase/supabase-js";
 
 // Define the user type
 type User = {
@@ -11,12 +13,21 @@ type User = {
   name?: string;
 };
 
+// Define profile type
+type Profile = {
+  id: string;
+  full_name?: string;
+  [key: string]: any;
+};
+
 // Define the auth context type
 type AuthContextType = {
   user: User | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
+  updatePassword: (password: string) => Promise<void>;
 };
 
 // Create the auth context
@@ -31,101 +42,165 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  const pathname = usePathname();
+  const supabase = createClient();
 
-  // Check if user is logged in on mount
   useEffect(() => {
     const checkUser = async () => {
       try {
-        // Check for user in cookies
-        const userCookie = Cookies.get("user");
+        setIsLoading(true);
 
-        if (userCookie) {
-          setUser(JSON.parse(userCookie));
+        // Get the current session
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (session) {
+          // Get the user details
+          const {
+            data: { user: authUser },
+          } = await supabase.auth.getUser();
+
+          if (authUser) {
+            // Get the user profile from the database
+            const { data: profile } = await supabase
+              .from("admin_profile")
+              .select("*")
+              .eq("id", authUser.id)
+              .single();
+
+            setUser({
+              id: authUser.id,
+              email: authUser.email || "",
+              name: (profile as Profile | null)?.full_name || authUser.email?.split("@")[0] || "",
+            });
+          }
         }
       } catch (error) {
-        console.error("Error checking authentication:", error);
-        // If there's an error parsing the cookie, clear it
-        Cookies.remove("user");
+        console.error("Error checking user:", error);
       } finally {
         setIsLoading(false);
       }
     };
 
+    // Initial check
     checkUser();
-  }, []);
 
-  // Redirect based on auth state
-  useEffect(() => {
-    if (!isLoading) {
-      // If user is not logged in and trying to access protected routes
-      if (!user && pathname?.startsWith("/dashboard")) {
-        router.push("/login");
-      }
+    // Set up auth state change listener
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session?.user) {
+        // Get the user profile from the database
+        const { data: profile } = await supabase
+          .from("admin_profile")
+          .select("*")
+          .eq("id", session.user.id)
+          .single();
 
-      // If user is logged in and trying to access auth routes
-      if (user && pathname === "/login") {
-        router.push("/dashboard");
-      }
-    }
-  }, [user, isLoading, pathname, router]);
-
-  // Login function
-  const login = async (email: string, password: string) => {
-    setIsLoading(true);
-
-    try {
-      // This is a mock login - we'll implement the actual login later
-      // For now, just check if email contains "admin"
-      if (email.includes("admin")) {
-        const mockUser = {
-          id: "1",
-          email,
-          name: "Admin User",
-        };
-
-        // Store user in cookie (expires in 7 days)
-        Cookies.set("user", JSON.stringify(mockUser), { expires: 7 });
-
-        // Set user in state
-        setUser(mockUser);
-
-        // Redirect to dashboard
-        router.push("/dashboard");
+        setUser({
+          id: session.user.id,
+          email: session.user.email || "",
+          name: (profile as Profile | null)?.full_name || session.user.email?.split("@")[0] || "",
+        });
       } else {
-        throw new Error("Invalid credentials");
+        setUser(null);
       }
+
+      // Refresh the page to update server-side data
+      if (event === "SIGNED_IN" || event === "SIGNED_OUT") {
+        router.refresh();
+      }
+    });
+
+    // Clean up the subscription
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [supabase, router]);
+
+  const login = async (email: string, password: string) => {
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast.success("Logged in successfully");
     } catch (error) {
-      console.error("Login error:", error);
+      const authError = error as AuthError;
+      toast.error(authError.message || "Failed to log in");
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  // Logout function
   const logout = async () => {
-    setIsLoading(true);
-
     try {
-      // Clear cookie
-      Cookies.remove("user");
+      const { error } = await supabase.auth.signOut();
 
-      // Clear user from state
+      if (error) {
+        throw error;
+      }
+
       setUser(null);
-
-      // Redirect to login
-      router.push("/login");
+      toast.success("Logged out successfully");
     } catch (error) {
-      console.error("Logout error:", error);
+      const authError = error as AuthError;
+      toast.error(authError.message || "Failed to log out");
       throw error;
-    } finally {
-      setIsLoading(false);
+    }
+  };
+
+  const resetPassword = async (email: string) => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password/update`,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast.success("Password reset email sent");
+    } catch (error) {
+      const authError = error as AuthError;
+      toast.error(authError.message || "Failed to send reset email");
+      throw error;
+    }
+  };
+
+  const updatePassword = async (password: string) => {
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast.success("Password updated successfully");
+    } catch (error) {
+      const authError = error as AuthError;
+      toast.error(authError.message || "Failed to update password");
+      throw error;
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isLoading,
+        login,
+        logout,
+        resetPassword,
+        updatePassword,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

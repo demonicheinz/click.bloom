@@ -1,9 +1,37 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BarChart3, Link as LinkIcon, Users, Activity, ArrowUpRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { BarChart3, Link as LinkIcon, Users, Activity } from "lucide-react";
 
 export default function Page() {
+  // Sample data with unique IDs
+  const recentActivities = [
+    { id: "act1", message: "Someone clicked your link", time: "Just now", link: "blog.io/seo23" },
+    {
+      id: "act2",
+      message: "Someone clicked your link",
+      time: "2 hours ago",
+      link: "blog.io/webinar",
+    },
+    {
+      id: "act3",
+      message: "Someone clicked your link",
+      time: "5 hours ago",
+      link: "blog.io/ebook",
+    },
+  ];
+
+  const topLinks = [
+    { id: "top1", name: "Product Launch", clicks: 5243, growth: "+12%" },
+    { id: "top2", name: "Summer Sale", clicks: 4829, growth: "+8%" },
+    { id: "top3", name: "Newsletter", clicks: 3671, growth: "+5%" },
+  ];
+
+  const recentLinks = [
+    { id: "recent1", name: "Blog Post: SEO Tips", url: "bloom.io/seo23", date: "2 days ago" },
+    { id: "recent2", name: "Webinar Registration", url: "bloom.io/webinar", date: "1 week ago" },
+    { id: "recent3", name: "E-book Download", url: "bloom.io/ebook", date: "2 weeks ago" },
+  ];
+
   return (
     <div className="flex flex-col gap-4 p-4 w-full">
       <div>
@@ -88,22 +116,16 @@ export default function Page() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-8">
-                  {[1, 2, 3].map((i) => (
+                  {recentActivities.map((activity) => (
                     <div
                       className="flex items-center"
-                      key={i}
+                      key={activity.id}
                     >
                       <div className="space-y-1">
-                        <p className="text-sm font-medium leading-none">
-                          Someone clicked your link
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {i === 1 ? "Just now" : i === 2 ? "2 hours ago" : "5 hours ago"}
-                        </p>
+                        <p className="text-sm font-medium leading-none">{activity.message}</p>
+                        <p className="text-sm text-muted-foreground">{activity.time}</p>
                       </div>
-                      <div className="ml-auto font-medium">
-                        {i === 1 ? "blog.io/seo23" : i === 2 ? "blog.io/webinar" : "blog.io/ebook"}
-                      </div>
+                      <div className="ml-auto font-medium">{activity.link}</div>
                     </div>
                   ))}
                 </div>
@@ -118,14 +140,10 @@ export default function Page() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-8">
-                  {[
-                    { name: "Product Launch", clicks: 5243, growth: "+12%" },
-                    { name: "Summer Sale", clicks: 4829, growth: "+8%" },
-                    { name: "Newsletter", clicks: 3671, growth: "+5%" },
-                  ].map((link, i) => (
+                  {topLinks.map((link) => (
                     <div
                       className="flex items-center"
-                      key={i}
+                      key={link.id}
                     >
                       <div className="space-y-1">
                         <p className="text-sm font-medium leading-none">{link.name}</p>
@@ -146,14 +164,10 @@ export default function Page() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-8">
-                  {[
-                    { name: "Blog Post: SEO Tips", url: "bloom.io/seo23", date: "2 days ago" },
-                    { name: "Webinar Registration", url: "bloom.io/webinar", date: "1 week ago" },
-                    { name: "E-book Download", url: "bloom.io/ebook", date: "2 weeks ago" },
-                  ].map((link, i) => (
+                  {recentLinks.map((link) => (
                     <div
                       className="flex items-center"
-                      key={i}
+                      key={link.id}
                     >
                       <div className="space-y-1">
                         <p className="text-sm font-medium leading-none">{link.name}</p>

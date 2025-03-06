@@ -22,16 +22,17 @@
 2. [Fitur](#feature)
 3. [Tech Stack](#tech-stack)
 4. [Getting Started](#getting-started)
-5. [Kontribusi](#kontribusi)
-6. [Lisensi](#lisensi)
-7. [Kontak](#kontak)
+5. [Deployment](#deployment)
+6. [Kontribusi](#kontribusi)
+7. [Lisensi](#lisensi)
+8. [Kontak](#kontak)
 
 
 ## Deskripsi
 
-click.boom adalah aplikasi berbagi tautan pribadi yang mirip dengan Linktree. Aplikasi ini memungkinkan Anda membuat halaman bio dengan tautan-tautan yang dapat dikustomisasi sepenuhnya.
+Click Bloom adalah aplikasi berbagi tautan pribadi yang mirip dengan Linktree. Aplikasi ini memungkinkan Anda membuat halaman bio dengan tautan-tautan yang dapat dikustomisasi sepenuhnya.
 
-## Feature
+## Fitur
 
 ### Halaman Bio Publik
 - Header profil dengan foto, nama, dan bio singkat
@@ -56,7 +57,7 @@ click.boom adalah aplikasi berbagi tautan pribadi yang mirip dengan Linktree. Ap
 
 ## Tech Stack
 
-click.boom dibangun dengan stack teknologi modern:
+ClickBloom dibangun dengan:
 
 - **Frontend**:
   - Next.js 15 dengan App Router
@@ -74,43 +75,71 @@ click.boom dibangun dengan stack teknologi modern:
 
 ### Prasyarat
 
-- Node.js 18.17 atau yang lebih baru
-- npm atau yarn
-- Akun Supabase
+- **Node.js** `v18` atau yang lebih baru → [Download Node.js](https://nodejs.org/)
+- **Package Manager**:  
+  - [`pnpm`](https://pnpm.io/) (disarankan)  
+  - [`npm`](https://www.npmjs.com/)  
+  - [`yarn`](https://yarnpkg.com/)  
+  - [`bun`](https://bun.sh/)
+- **Akun Supabase** → [Daftar di Supabase](https://supabase.com/)
 
 ### Instalasi
 
 1. Clone repositori:
-```bash
-git clone https://github.com/yourusername/click.boom.git
-cd click.boom
-```
+    ```bash
+    git clone https://github.com/yourusername/click.boom.git
+    cd click.boom
+    ```
 
 2. Instal dependensi:
-```bash
-npm install
-# atau
-yarn install
-```
+    ```bash
+    pnpm install
+    # atau
+    npm install
+    # atau
+    yarn install
+    # atau
+    bun install
+    ```
 
-3. Buat file `.env.local` dan tambahkan variabel lingkungan:
-```
-NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
-```
+3. Buat file `.env.local`:\
+    Linux & macOS:
+    ```bash
+    # (bash/zsh)
+    cp .env.example .env.local
+    ```
 
-4. Setup Supabase:
+    Windows:
+    ```bash
+    # (CMD/Command Prompt)
+    copy .env.example .env.local
+    
+    # (PowerShell)
+    Copy-Item .env.example -Destination .env.local
+    ```
+
+4. Edit `.env.local` dan tambahkan konfigurasi berikut:
+    ```ini
+    NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+    SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
+    ```
+
+5. Setup Supabase:
    - Buat proyek baru di Supabase
    - Jalankan SQL yang ada di `supabase/schema.sql` untuk membuat tabel dan kebijakan akses
    - Aktifkan autentikasi email dan buat akun admin pertama
 
-5. Jalankan aplikasi:
-```bash
-npm run dev
-# atau
-yarn dev
-```
+6. Jalankan aplikasi:
+    ```bash
+    pnpm dev
+    # atau
+    npm run dev
+    # atau
+    yarn dev
+    # atau
+    bun dev
+    ```
 
 6. Buka `http://localhost:3000` di browser Anda
 
@@ -119,7 +148,7 @@ yarn dev
 Jalankan SQL berikut di SQL Editor Supabase Anda:
 
 <details>
-<summary>Setup Database</summary>
+<summary>📃 SQL</summary>
 
 ```sql
 -- Tabel Admin Profile
@@ -201,11 +230,11 @@ ON public.categories FOR ALL USING (
 
 ## Deployment
 
-click.boom dapat dengan mudah di-deploy ke layanan hosting seperti Vercel atau Netlify:
+Click Bloom dapat dengan mudah di-deploy ke layanan hosting seperti Vercel atau Netlify:
 
 1. Buat repositori GitHub untuk proyek Anda
 2. Hubungkan repositori ke Vercel atau Netlify
-3. Konfigurasikan variabel lingkungan yang diperlukan
+3. Konfigurasikan `.env.local` yang diperlukan
 4. Deploy!
 
 ## Kontribusi
@@ -224,8 +253,11 @@ Didistribusikan di bawah Lisensi MIT. Lihat `LICENSE` untuk informasi lebih lanj
 
 ## Kontak
 
-Heinz - contact@heinz.id
+Jika ada pertanyaan atau ingin berkontribusi, jangan ragu untuk menghubungi saya!  
+
+Email: [contact@heinz.id](mailto:contact@heinz.id)
+GitHub: [Heinz](https://github.com/demonicheinz)
 
 Made with ❤️ by [Heinz](https://github.com/demonicheinz)
 
-Terima kasih telah melihat proyek ini! Happy coding!
+Terima kasih telah melihat proyek ini! **Happy coding**🚀

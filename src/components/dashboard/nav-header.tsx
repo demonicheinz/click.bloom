@@ -8,6 +8,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import Image from "next/image";
+import { useMobileSidebar } from "@/app/(dashboard)/layout";
 
 export function NavHeader({
   items,
@@ -18,7 +19,9 @@ export function NavHeader({
   }[];
 }) {
   const router = useRouter();
-  const [activeItem, setActiveItem] = React.useState(items[0]);
+  const [activeItem] = React.useState(items[0]);
+  const { isMobile } = useSidebar();
+  const mobileSidebar = useMobileSidebar();
 
   if (!activeItem) {
     return null;
@@ -26,6 +29,11 @@ export function NavHeader({
 
   const handleClick = () => {
     router.push("/dashboard");
+
+    // Close mobile sidebar when logo is clicked
+    if (isMobile) {
+      mobileSidebar.setIsMobileSidebarOpen(false);
+    }
   };
 
   return (

@@ -15,6 +15,9 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+// Define shadow intensity type for proper type checking
+type ShadowIntensity = "none" | "light" | "medium" | "heavy";
+
 const templates: { value: TemplateStyle; label: string }[] = [
   { value: "default", label: "Default" },
   { value: "minimal", label: "Minimal" },
@@ -151,7 +154,7 @@ export function ThemeCustomizer() {
               <Label>Shadow Intensity</Label>
               <Select
                 value={theme.style.shadowIntensity}
-                onValueChange={(value: any) => updateStyle({ shadowIntensity: value })}
+                onValueChange={(value: ShadowIntensity) => updateStyle({ shadowIntensity: value })}
               >
                 <SelectTrigger>
                   <SelectValue />

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +12,7 @@ import { useAuth } from "@/components/auth/auth-provider";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
 
 export function LoginForm() {
+  const router = useRouter();
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,14 +21,14 @@ export function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     setError("");
+    setIsLoading(true);
 
     try {
       await login(email, password);
+      router.push("/dashboard");
     } catch (err) {
-      setError("Invalid credentials. Please try again.");
-      console.error(err);
+      setError("Invalid email or password");
     } finally {
       setIsLoading(false);
     }
@@ -49,7 +51,7 @@ export function LoginForm() {
         <Input
           id="email"
           type="email"
-          placeholder="admin@example.com"
+          placeholder="name@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -62,7 +64,7 @@ export function LoginForm() {
         <div className="flex items-center justify-between">
           <Label htmlFor="password">Password</Label>
           <Link
-            href="#"
+            href="/reset-password"
             className="text-xs text-primary hover:underline"
           >
             Forgot password?

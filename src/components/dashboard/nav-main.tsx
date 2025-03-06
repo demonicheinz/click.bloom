@@ -35,10 +35,13 @@ export function NavMain({
 
   return (
     <SidebarGroup>
+      <SidebarGroupLabel>Menu</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
-          // Check for exact path match only
-          const isActive = pathname === item.url;
+          // Check if the current path starts with the item's URL or is exactly the same
+          // This ensures that sub-pages are also highlighted
+          const isActive =
+            pathname === item.url || (pathname.startsWith(item.url) && item.url !== "/dashboard");
 
           // For direct links without collapsible content
           if (item.directLink || !item.items || item.items.length === 0) {
@@ -63,7 +66,7 @@ export function NavMain({
             item.items?.some((subItem) => {
               // Extract base URL without hash
               const baseUrl = subItem.url.split("#")[0];
-              return pathname === baseUrl;
+              return pathname === baseUrl || pathname.startsWith(baseUrl);
             }) ?? false;
 
           // Group is active if the item itself is active or any sub-item is active
@@ -92,7 +95,7 @@ export function NavMain({
                     {item.items?.map((subItem) => {
                       // Extract base URL without hash
                       const baseUrl = subItem.url.split("#")[0];
-                      const isSubItemActive = pathname === baseUrl;
+                      const isSubItemActive = pathname === baseUrl || pathname.startsWith(baseUrl);
 
                       return (
                         <SidebarMenuSubItem key={subItem.title}>
